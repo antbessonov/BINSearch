@@ -20,7 +20,7 @@ fun BINSearchNavGraph(
         modifier = modifier
     ) {
         composable(route = BINSearchDestination.SEARCH.route) {
-            SearchCardInfoScreen()
+            SearchCardInfoScreen(modifier = modifier)
         }
         composable(route = BINSearchDestination.HISTORY.route) {
             RequestHistoryScreen()
