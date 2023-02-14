@@ -6,4 +6,14 @@
     <string name="start_searching">Начать поиск</string>
     <string name="enter_valid_bank_identification_number">Введите от 6 до 8 цифр</string>
     <string name="input_error">Ошибка ввода</string>
+    <string name="ok">Хорошо</string>
+    <string name="BIN_not_found">BIN не найден</string>
+    <string name="error_BIN_not_found_description">Пожалуйста, проверьте номер BIN и повторите
+        попытку.</string>
+    <string name="network_problem">Ошибка сети</string>
+    <string name="error_network_problem_description">Пожалуйста, проверьте подключение к сети и
+        повторите попытку.</string>
+    <string name="something_went_wrong">Ошибка</string>
+    <string name="error_something_went_wrong_description">Возникла проблема. Повторите попытку
+        позже. Если проблема не исчезнет, свяжитесь с техподдержкой.</string>
 </resources>
