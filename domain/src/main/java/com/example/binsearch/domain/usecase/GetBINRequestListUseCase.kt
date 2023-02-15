@@ -6,5 +6,5 @@ class GetBINRequestListUseCase(
     private val repository: AppRepository
 ) {
 
-    operator fun invoke() = repository.getBINRequestList()
+    suspend operator fun invoke() = repository.getBINRequestList()
 }
