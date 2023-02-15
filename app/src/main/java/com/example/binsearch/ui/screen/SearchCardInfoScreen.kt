@@ -11,7 +11,6 @@ import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.binsearch.R
 import com.example.binsearch.domain.util.ErrorMessage
 import com.example.binsearch.ui.component.DialogError
@@ -37,7 +37,7 @@ fun SearchCardInfoScreen(
     searchCardInfoViewModel: SearchCardInfoViewModel = hiltViewModel()
 ) {
 
-    val searchCardInfoState by searchCardInfoViewModel.searchCardInfoState.collectAsState()
+    val searchCardInfoState by searchCardInfoViewModel.searchCardInfoState.collectAsStateWithLifecycle()
 
     Column(
         modifier = modifier
