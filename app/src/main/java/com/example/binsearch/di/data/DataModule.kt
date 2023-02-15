@@ -1,7 +1,8 @@
-package com.example.binsearch.di
+package com.example.binsearch.di.data
 
+import com.example.binsearch.data.database.BINRequestDao
+import com.example.binsearch.data.mapper.BINRequestMapper
 import com.example.binsearch.data.mapper.CardInfoMapper
-import com.example.binsearch.data.network.APIFactory
 import com.example.binsearch.data.network.APIService
 import com.example.binsearch.data.repository.AppRepositoryImpl
 import com.example.binsearch.domain.repository.AppRepository
@@ -17,19 +18,17 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun provideAPIService(): APIService {
-        return APIFactory.apiService
-    }
-
-    @Provides
-    @Singleton
     fun provideAppRepository(
         apiService: APIService,
-        cardInfoMapper: CardInfoMapper
+        cardInfoMapper: CardInfoMapper,
+        binRequestDao: BINRequestDao,
+        binRequestMapper: BINRequestMapper
     ): AppRepository {
         return AppRepositoryImpl(
             apiService = apiService,
-            cardInfoMapper = cardInfoMapper
+            cardInfoMapper = cardInfoMapper,
+            binRequestDao = binRequestDao,
+            binRequestMapper = binRequestMapper
         )
     }
 
@@ -37,5 +36,11 @@ object DataModule {
     @Singleton
     fun provideCardInfoMapper(): CardInfoMapper {
         return CardInfoMapper()
+    }
+
+    @Provides
+    @Singleton
+    fun provideBINRequestMapper(): BINRequestMapper {
+        return BINRequestMapper()
     }
 }
