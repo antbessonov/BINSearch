@@ -1,20 +1,29 @@
 package com.example.binsearch.data.repository
 
+import com.example.binsearch.data.database.BINRequestDao
+import com.example.binsearch.data.database.model.BINRequestDbModel
+import com.example.binsearch.data.mapper.BINRequestMapper
 import com.example.binsearch.data.mapper.CardInfoMapper
 import com.example.binsearch.data.network.APIService
+import com.example.binsearch.domain.model.BINRequest
 import com.example.binsearch.domain.model.CardInfo
 import com.example.binsearch.domain.repository.AppRepository
 import com.example.binsearch.domain.util.ErrorMessage
 import com.example.binsearch.domain.util.LoadingState
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import java.io.IOException
 
 class AppRepositoryImpl(
     private val apiService: APIService,
-    private val cardInfoMapper: CardInfoMapper
+    private val cardInfoMapper: CardInfoMapper,
+    private val binRequestDao: BINRequestDao,
+    private val binRequestMapper: BINRequestMapper
 ) : AppRepository {
 
     override suspend fun getCardInfo(binCard: Int): LoadingState<CardInfo> {
         return try {
+            saveBINRequestToDatabase(binCard = binCard)
             val response = apiService.getGardInfo(binCard = binCard)
             cardInfoMapper.mapResponseToState(response)
         } catch (e: IOException) {
@@ -22,5 +31,23 @@ class AppRepositoryImpl(
         } catch (e: Exception) {
             LoadingState.Error(message = ErrorMessage.SomethingWentWrong)
         }
+    }
+
+    override fun getBINRequestList(): Flow<List<BINRequest>> {
+        return binRequestDao.getBINRequestList().map { binRequestDbModelList ->
+            binRequestDbModelList.map { binRequestDbModel ->
+                binRequestMapper.mapDbModelToEntity(dbModel = binRequestDbModel)
+            }
+        }
+    }
+
+    private suspend fun saveBINRequestToDatabase(binCard: Int) {
+        val requestTime = cardInfoMapper.getRequestTime()
+        binRequestDao.insertBINRequest(
+            binRequest = BINRequestDbModel(
+                time = requestTime,
+                binCard = binCard
+            )
+        )
     }
 }
