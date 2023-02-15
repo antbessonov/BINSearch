@@ -6,7 +6,7 @@ import com.example.binsearch.domain.model.CardInfo
 import com.example.binsearch.domain.usecase.GetCardInfoUseCase
 import com.example.binsearch.domain.util.ErrorMessage
 import com.example.binsearch.domain.util.LoadingState
-import com.example.binsearch.ui.model.CardInfoUI
+import com.example.binsearch.ui.model.CardInfoUiConverter
 import com.example.binsearch.ui.state.SearchCardInfoState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -18,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchCardInfoViewModel @Inject constructor(
-    private val getCardInfoUseCase: GetCardInfoUseCase
+    private val getCardInfoUseCase: GetCardInfoUseCase,
+    private val cardInfoUiConverter: CardInfoUiConverter
 ) : ViewModel() {
 
     private val _searchCardInfoState = MutableStateFlow(SearchCardInfoState())
@@ -91,16 +92,7 @@ class SearchCardInfoViewModel @Inject constructor(
     private fun reduce(loadingState: LoadingState.Success<CardInfo>) {
         _searchCardInfoState.value = _searchCardInfoState.value.copy(
             isLoadingProgressBar = false,
-            cardInfo = CardInfoUI(
-                length = loadingState.value.numberCard.length.toString(),
-                luhn = loadingState.value.numberCard.luhn.toString(),
-                country = "${loadingState.value.country.emoji} ${loadingState.value.country.name}",
-                scheme = loadingState.value.scheme ?: "-",
-                type = loadingState.value.type ?: "-",
-                brand = loadingState.value.brand ?: "-",
-                prepaid = loadingState.value.prepaid.toString(),
-                bank = loadingState.value.bank.name ?: "-"
-            )
+            cardInfo = cardInfoUiConverter.convertEntityToUiModel(cardInfo = loadingState.value)
         )
     }
 
