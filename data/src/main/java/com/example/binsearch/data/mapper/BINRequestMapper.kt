@@ -11,6 +11,10 @@ class BINRequestMapper {
         return BINRequest(time = convertLongToTime(time = dbModel.time), binCard = dbModel.binCard)
     }
 
+    fun getRequestTime(): Long {
+        return Date().time
+    }
+
     private fun convertLongToTime(time: Long): String {
         val date = Date(time)
         val pattern = "dd.MM.yyyy HH:mm"

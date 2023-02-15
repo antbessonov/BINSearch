@@ -39,7 +39,7 @@ class AppRepositoryImpl(
 
 
     private suspend fun saveBINRequestToDatabase(binCard: String) {
-        val requestTime = cardInfoMapper.getRequestTime()
+        val requestTime = binRequestMapper.getRequestTime()
         binRequestDao.insertBINRequest(
             binRequest = BINRequestDbModel(
                 time = requestTime,

@@ -11,7 +11,6 @@ import com.example.binsearch.domain.model.NumberCard
 import com.example.binsearch.domain.util.ErrorMessage
 import com.example.binsearch.domain.util.LoadingState
 import retrofit2.Response
-import java.util.*
 
 class CardInfoMapper {
 
@@ -25,10 +24,6 @@ class CardInfoMapper {
             404 -> LoadingState.Error(message = ErrorMessage.BINNotFound)
             else -> LoadingState.Error(message = ErrorMessage.SomethingWentWrong)
         }
-    }
-
-    fun getRequestTime(): Long {
-        return Date().time
     }
 
     private fun mapDtoToEntity(dto: CardInfoDto): CardInfo {
