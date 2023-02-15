@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "5e5f879f1d46449af23c62658cf6b56d",
+    "identityHash": "527ceb1122f69e54b03dbad12c6f7ab0",
     "entities": [
       {
         "tableName": "bin_requests",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`time` INTEGER NOT NULL, `binCard` INTEGER NOT NULL, PRIMARY KEY(`time`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`time` INTEGER NOT NULL, `binCard` TEXT NOT NULL, PRIMARY KEY(`time`))",
         "fields": [
           {
             "fieldPath": "time",
@@ -17,7 +17,7 @@
           {
             "fieldPath": "binCard",
             "columnName": "binCard",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": true
           }
         ],
@@ -34,7 +34,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5e5f879f1d46449af23c62658cf6b56d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '527ceb1122f69e54b03dbad12c6f7ab0')"
     ]
   }
 }

@@ -6,5 +6,5 @@ class GetCardInfoUseCase(
     private val repository: AppRepository
 ) {
 
-    suspend operator fun invoke(binCard: Int) = repository.getCardInfo(binCard = binCard)
+    suspend operator fun invoke(binCard: String) = repository.getCardInfo(binCard = binCard)
 }

@@ -8,5 +8,5 @@ import retrofit2.http.Path
 interface APIService {
 
     @GET("{binCard}")
-    suspend fun getGardInfo(@Path("binCard") binCard: Int): Response<CardInfoDto>
+    suspend fun getGardInfo(@Path("binCard") binCard: String): Response<CardInfoDto>
 }

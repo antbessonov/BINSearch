@@ -19,7 +19,7 @@ class AppRepositoryImpl(
     private val binRequestMapper: BINRequestMapper
 ) : AppRepository {
 
-    override suspend fun getCardInfo(binCard: Int): LoadingState<CardInfo> {
+    override suspend fun getCardInfo(binCard: String): LoadingState<CardInfo> {
         return try {
             saveBINRequestToDatabase(binCard = binCard)
             val response = apiService.getGardInfo(binCard = binCard)
@@ -38,7 +38,7 @@ class AppRepositoryImpl(
     }
 
 
-    private suspend fun saveBINRequestToDatabase(binCard: Int) {
+    private suspend fun saveBINRequestToDatabase(binCard: String) {
         val requestTime = cardInfoMapper.getRequestTime()
         binRequestDao.insertBINRequest(
             binRequest = BINRequestDbModel(

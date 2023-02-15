@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 data class BINRequestDbModel(
     @PrimaryKey
     val time: Long,
-    val binCard: Int
+    val binCard: String
 )

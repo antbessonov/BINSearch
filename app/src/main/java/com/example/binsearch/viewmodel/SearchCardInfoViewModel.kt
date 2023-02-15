@@ -33,10 +33,9 @@ class SearchCardInfoViewModel @Inject constructor(
             )
         }
         viewModelScope.launch(coroutineExceptionHandler) {
-            _searchCardInfoState.value =
-                _searchCardInfoState.value.copy(isLoadingProgressBar = true)
+            _searchCardInfoState.value = _searchCardInfoState.value.copy(isLoadingProgressBar = true)
             delay(1500L)
-            val response = getCardInfoUseCase(binCard = binCard.toInt())
+            val response = getCardInfoUseCase(binCard = binCard)
             handleResponse(response = response)
         }
     }
