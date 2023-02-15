@@ -10,8 +10,6 @@ import com.example.binsearch.domain.model.CardInfo
 import com.example.binsearch.domain.repository.AppRepository
 import com.example.binsearch.domain.util.ErrorMessage
 import com.example.binsearch.domain.util.LoadingState
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import java.io.IOException
 
 class AppRepositoryImpl(
@@ -33,13 +31,12 @@ class AppRepositoryImpl(
         }
     }
 
-    override fun getBINRequestList(): Flow<List<BINRequest>> {
-        return binRequestDao.getBINRequestList().map { binRequestDbModelList ->
-            binRequestDbModelList.map { binRequestDbModel ->
-                binRequestMapper.mapDbModelToEntity(dbModel = binRequestDbModel)
-            }
+    override suspend fun getBINRequestList(): List<BINRequest> {
+        return binRequestDao.getBINRequestList().map {
+            binRequestMapper.mapDbModelToEntity(it)
         }
     }
+
 
     private suspend fun saveBINRequestToDatabase(binCard: Int) {
         val requestTime = cardInfoMapper.getRequestTime()
