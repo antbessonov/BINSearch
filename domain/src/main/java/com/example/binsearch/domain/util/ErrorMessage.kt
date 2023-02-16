@@ -1,7 +1,11 @@
 package com.example.binsearch.domain.util
 
-sealed class ErrorMessage {
-    object BINNotFound: ErrorMessage()
-    object NetworkProblem: ErrorMessage()
-    object SomethingWentWrong: ErrorMessage()
+sealed interface ErrorMessage
+
+sealed class LoadingError : ErrorMessage {
+    object BINNotFound : LoadingError()
+    object NetworkProblem : LoadingError()
+    object SomethingWentWrong : LoadingError()
 }
+
+object OperationFailed : ErrorMessage
