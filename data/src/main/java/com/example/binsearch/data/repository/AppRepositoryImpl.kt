@@ -8,7 +8,7 @@ import com.example.binsearch.data.network.APIService
 import com.example.binsearch.domain.model.BINRequest
 import com.example.binsearch.domain.model.CardInfo
 import com.example.binsearch.domain.repository.AppRepository
-import com.example.binsearch.domain.util.ErrorMessage
+import com.example.binsearch.domain.util.LoadingError
 import com.example.binsearch.domain.util.LoadingState
 import java.io.IOException
 
@@ -25,9 +25,9 @@ class AppRepositoryImpl(
             val response = apiService.getGardInfo(binCard = binCard)
             cardInfoMapper.mapResponseToState(response)
         } catch (e: IOException) {
-            LoadingState.Error(message = ErrorMessage.NetworkProblem)
+            LoadingState.Error(message = LoadingError.NetworkProblem)
         } catch (e: Exception) {
-            LoadingState.Error(message = ErrorMessage.SomethingWentWrong)
+            LoadingState.Error(message = LoadingError.SomethingWentWrong)
         }
     }
 
