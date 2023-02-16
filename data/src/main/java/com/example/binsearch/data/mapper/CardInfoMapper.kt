@@ -8,7 +8,7 @@ import com.example.binsearch.domain.model.Bank
 import com.example.binsearch.domain.model.CardInfo
 import com.example.binsearch.domain.model.Country
 import com.example.binsearch.domain.model.NumberCard
-import com.example.binsearch.domain.util.ErrorMessage
+import com.example.binsearch.domain.util.LoadingError
 import com.example.binsearch.domain.util.LoadingState
 import retrofit2.Response
 
@@ -21,8 +21,8 @@ class CardInfoMapper {
                 val cardInfo = mapDtoToEntity(responseBody)
                 LoadingState.Success(cardInfo)
             }
-            404 -> LoadingState.Error(message = ErrorMessage.BINNotFound)
-            else -> LoadingState.Error(message = ErrorMessage.SomethingWentWrong)
+            404 -> LoadingState.Error(message = LoadingError.BINNotFound)
+            else -> LoadingState.Error(message = LoadingError.SomethingWentWrong)
         }
     }
 
@@ -53,10 +53,10 @@ class CardInfoMapper {
         longitude = countryDto.longitude
     )
 
-    private fun mapBankDtoToEntity(bankDto: BankDto) = Bank(
-        name = bankDto.name,
-        url = bankDto.url,
-        phone = bankDto.phone,
-        city = bankDto.city
+    private fun mapBankDtoToEntity(bankDto: BankDto?) = Bank(
+        name = bankDto?.name,
+        url = bankDto?.url,
+        phone = bankDto?.phone,
+        city = bankDto?.city
     )
 }
