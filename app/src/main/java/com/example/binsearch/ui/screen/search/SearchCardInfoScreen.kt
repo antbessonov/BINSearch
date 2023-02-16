@@ -1,5 +1,10 @@
-package com.example.binsearch.ui.screen
+package com.example.binsearch.ui.screen.search
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -27,6 +32,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.binsearch.R
 import com.example.binsearch.domain.util.ErrorMessage
+import com.example.binsearch.domain.util.LoadingError
+import com.example.binsearch.domain.util.OperationFailed
 import com.example.binsearch.ui.component.DialogError
 import com.example.binsearch.ui.component.ProgressBarLoading
 import com.example.binsearch.viewmodel.SearchCardInfoViewModel
@@ -56,6 +63,20 @@ fun SearchCardInfoScreen(
             onFocusChange = searchCardInfoViewModel::hideCardInfo,
             isBINValid = searchCardInfoState.isBINValid
         )
+        AnimatedVisibility(
+            modifier = modifier.padding(top = 24.dp, bottom = 8.dp),
+            visible = searchCardInfoState.cardInfo != null,
+            enter = fadeIn(animationSpec = tween(1500)) + slideInVertically(),
+            exit = fadeOut(animationSpec = tween(1000)) + fadeOut()
+        ) {
+            searchCardInfoState.cardInfo?.let {
+                CardInfoContent(
+                    modifier = modifier,
+                    cardInfo = it,
+                    onClickUrl = searchCardInfoViewModel::obtainCardInfoEvent
+                )
+            }
+        }
     }
     ProgressBarLoading(modifier = modifier, isLoading = searchCardInfoState.isLoadingProgressBar)
     searchCardInfoState.errorMessage?.let {
@@ -143,26 +164,33 @@ private fun ErrorMessageContent(
     errorMessage: ErrorMessage,
 ) {
     when (errorMessage) {
-        ErrorMessage.BINNotFound -> DialogError(
+        LoadingError.BINNotFound -> DialogError(
             modifier = modifier,
             onDialogDismiss = onDialogDismiss,
             onButtonClick = onButtonClick,
             errorTitle = stringResource(R.string.BIN_not_found),
             errorDescription = stringResource(R.string.error_BIN_not_found_description),
         )
-        ErrorMessage.NetworkProblem -> DialogError(
+        LoadingError.NetworkProblem -> DialogError(
             modifier = modifier,
             onDialogDismiss = onDialogDismiss,
             onButtonClick = onButtonClick,
             errorTitle = stringResource(R.string.network_problem),
             errorDescription = stringResource(R.string.error_network_problem_description),
         )
-        ErrorMessage.SomethingWentWrong -> DialogError(
+        LoadingError.SomethingWentWrong -> DialogError(
             modifier = modifier,
             onDialogDismiss = onDialogDismiss,
             onButtonClick = onButtonClick,
             errorTitle = stringResource(R.string.something_went_wrong),
             errorDescription = stringResource(R.string.error_something_went_wrong_description),
+        )
+        OperationFailed -> DialogError(
+            modifier = modifier,
+            onDialogDismiss = onDialogDismiss,
+            onButtonClick = onButtonClick,
+            errorTitle = stringResource(R.string.operation_error),
+            errorDescription = stringResource(R.string.error_operation_failed_description),
         )
     }
 }
