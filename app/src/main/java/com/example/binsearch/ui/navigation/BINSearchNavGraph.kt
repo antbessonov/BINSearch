@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.binsearch.ui.screen.RequestHistoryScreen
-import com.example.binsearch.ui.screen.SearchCardInfoScreen
+import com.example.binsearch.ui.screen.search.SearchCardInfoScreen
 
 @Composable
 fun BINSearchNavGraph(
