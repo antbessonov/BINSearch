@@ -16,4 +16,17 @@
     <string name="something_went_wrong">Ошибка</string>
     <string name="error_something_went_wrong_description">Возникла проблема. Повторите попытку
         позже. Если проблема не исчезнет, свяжитесь с техподдержкой.</string>
+    <string name="network">ПЛАТЕЖНАЯ СЕТЬ</string>
+    <string name="type">ТИП</string>
+    <string name="brand">БРЕНД</string>
+    <string name="prepaid">ПРЕДОПЛАТА</string>
+    <string name="country">СТРАНА</string>
+    <string name="card_number_info">ИНФОРМАЦИЯ О КАРТЕ</string>
+    <string name="length">ДЛИНА НОМЕРА</string>
+    <string name="luhn">АЛГОРИТМ ЛУНА</string>
+    <string name="bank">БАНК</string>
+    <string name="operation_error">Ошибка операции</string>
+    <string name="error_operation_failed_description">Не удалось выполнить операцию.
+        Подходящее приложение не найдено.</string>
+    <string name="сoordinates">(широта: %s, долгота: %s)</string>
 </resources>
