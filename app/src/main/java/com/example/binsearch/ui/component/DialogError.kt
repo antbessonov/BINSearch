@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.binsearch.R
+import com.example.binsearch.ui.theme.replyTypography
 
 @Composable
 fun DialogError(
@@ -22,14 +23,14 @@ fun DialogError(
         onDismissRequest = onDialogDismiss,
         confirmButton = {
             TextButton(onClick = onButtonClick) {
-                Text(text = stringResource(R.string.ok))
+                Text(text = stringResource(R.string.ok), style = replyTypography.labelLarge)
             }
         },
         title = {
-            Text(text = errorTitle)
+            Text(text = errorTitle, style = replyTypography.titleLarge)
         },
         text = {
-            Text(text = errorDescription)
+            Text(text = errorDescription, style = replyTypography.bodyLarge)
         }
     )
 }
