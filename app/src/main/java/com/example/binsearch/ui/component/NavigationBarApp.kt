@@ -15,6 +15,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.binsearch.ui.navigation.NavItem
+import com.example.binsearch.ui.theme.replyTypography
 
 @Composable
 fun NavigationBarApp(
@@ -36,7 +37,12 @@ fun NavigationBarApp(
                         contentDescription = stringResource(id = item.title)
                     )
                 },
-                label = { Text(stringResource(id = item.title)) },
+                label = {
+                    Text(
+                        text = stringResource(id = item.title),
+                        style = replyTypography.labelLarge
+                    )
+                },
                 selected = currentDestination?.hierarchy?.any { it.route == item.navRoute } == true,
                 onClick = {
                     navController.navigate(item.navRoute) {
