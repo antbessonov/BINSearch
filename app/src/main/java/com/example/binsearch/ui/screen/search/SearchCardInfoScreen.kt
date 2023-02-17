@@ -36,6 +36,7 @@ import com.example.binsearch.domain.util.LoadingError
 import com.example.binsearch.domain.util.OperationFailed
 import com.example.binsearch.ui.component.DialogError
 import com.example.binsearch.ui.component.ProgressBarLoading
+import com.example.binsearch.ui.theme.replyTypography
 import com.example.binsearch.viewmodel.SearchCardInfoViewModel
 
 @Composable
@@ -73,7 +74,7 @@ fun SearchCardInfoScreen(
                 CardInfoContent(
                     modifier = modifier,
                     cardInfo = it,
-                    onClickUrl = searchCardInfoViewModel::obtainCardInfoEvent
+                    onClick = searchCardInfoViewModel::obtainCardInfoEvent
                 )
             }
         }
@@ -110,8 +111,12 @@ private fun SearchField(
         },
         value = value,
         onValueChange = onValueChange,
+        textStyle = replyTypography.headlineSmall,
         label = {
-            Text(text = stringResource(R.string.bank_identification_number))
+            Text(
+                text = stringResource(R.string.bank_identification_number),
+                style = replyTypography.titleMedium
+            )
         },
         trailingIcon = {
             if ((!isBINValid).and(value.isNotEmpty())) {
@@ -135,11 +140,15 @@ private fun SearchField(
         },
         supportingText = {
             if ((!isBINValid).and(value.isNotEmpty())) {
-                Text(text = stringResource(R.string.enter_valid_bank_identification_number))
+                Text(
+                    text = stringResource(R.string.enter_valid_bank_identification_number),
+                    style = replyTypography.titleSmall
+                )
             }
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = "${value.length} / $maxChar",
+                style = replyTypography.titleSmall,
                 textAlign = TextAlign.End,
             )
         },
