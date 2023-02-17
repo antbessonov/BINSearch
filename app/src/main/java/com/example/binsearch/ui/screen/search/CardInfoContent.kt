@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.binsearch.R
@@ -25,12 +24,13 @@ import com.example.binsearch.ui.model.BankUi
 import com.example.binsearch.ui.model.CardInfoUI
 import com.example.binsearch.ui.model.CountryUi
 import com.example.binsearch.ui.model.converter.CardInfoUiConverter
+import com.example.binsearch.ui.theme.replyTypography
 
 @Composable
 fun CardInfoContent(
     modifier: Modifier,
     cardInfo: CardInfoUI,
-    onClickUrl: (CardInfoClickedEvent) -> Unit
+    onClick: (CardInfoClickedEvent) -> Unit
 ) {
     val weightFirst = 0.55f
     val weightSecond = 0.45f
@@ -41,7 +41,8 @@ fun CardInfoContent(
         Column(modifier = modifier.padding(16.dp)) {
             Text(
                 modifier = modifier.align(alignment = Alignment.CenterHorizontally),
-                text = stringResource(id = R.string.card_number_info)
+                text = stringResource(id = R.string.card_number_info),
+                style = replyTypography.titleMedium
             )
             Row(modifier = modifier.padding(top = 8.dp)) {
                 CardInfoDescriptionPart(
@@ -82,13 +83,13 @@ fun CardInfoContent(
             BankInfo(
                 modifier = modifier.align(alignment = Alignment.CenterHorizontally),
                 bank = cardInfo.bank,
-                onClick = onClickUrl,
+                onClick = onClick,
                 context = context
             )
             CountryInfo(
                 modifier = modifier.align(alignment = Alignment.CenterHorizontally),
                 country = cardInfo.country,
-                onClick = onClickUrl,
+                onClick = onClick,
                 context = context
             )
         }
@@ -103,11 +104,15 @@ private fun CountryInfo(
     context: Context
 ) {
     Column(modifier = modifier.padding(top = 8.dp)) {
-        Text(modifier = modifier, text = stringResource(id = R.string.country))
+        Text(
+            modifier = modifier,
+            text = stringResource(id = R.string.country),
+            style = replyTypography.bodyLarge
+        )
         Text(
             modifier = modifier,
             text = country.nameWithEmoji,
-            fontWeight = FontWeight.ExtraBold
+            style = replyTypography.bodyMedium
         )
         Text(
             modifier = modifier.clickable {
@@ -123,6 +128,7 @@ private fun CountryInfo(
                 country.latitude,
                 country.longitude
             ),
+            style = replyTypography.bodyMedium,
             color = Color.Blue
         )
     }
@@ -136,11 +142,15 @@ private fun BankInfo(
     context: Context
 ) {
     Column(modifier = modifier.padding(top = 8.dp)) {
-        Text(modifier = modifier, text = stringResource(R.string.bank))
+        Text(
+            modifier = modifier,
+            text = stringResource(R.string.bank),
+            style = replyTypography.bodyLarge
+        )
         Text(
             modifier = modifier,
             text = "${bank.name}, ${bank.city}",
-            fontWeight = FontWeight.ExtraBold
+            style = replyTypography.bodyMedium
         )
         Text(
             modifier = modifier.clickable(enabled = bank.url != CardInfoUiConverter.EMPTY_VALUE) {
@@ -152,6 +162,7 @@ private fun BankInfo(
                 )
             },
             text = bank.url,
+            style = replyTypography.bodyMedium,
             color = Color.Blue
         )
         Text(
@@ -164,6 +175,7 @@ private fun BankInfo(
                 )
             },
             text = bank.phone,
+            style = replyTypography.bodyMedium,
             color = Color.Blue
         )
     }
@@ -176,8 +188,8 @@ private fun CardInfoDescriptionPart(
     description: String
 ) {
     Column(modifier = modifier) {
-        Text(text = title)
-        Text(text = description, fontWeight = FontWeight.ExtraBold)
+        Text(text = title, style = replyTypography.bodyLarge)
+        Text(text = description, style = replyTypography.bodyMedium)
     }
 }
 
@@ -203,5 +215,5 @@ private fun CardInfoContentPreview() {
             phone = "+4589893300"
         )
     )
-    CardInfoContent(modifier = Modifier, cardInfo = cardInfo, onClickUrl = {})
+    CardInfoContent(modifier = Modifier, cardInfo = cardInfo, onClick = {})
 }
