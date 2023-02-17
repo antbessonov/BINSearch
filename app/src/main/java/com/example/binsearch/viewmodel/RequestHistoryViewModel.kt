@@ -3,6 +3,7 @@ package com.example.binsearch.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.binsearch.domain.usecase.GetBINRequestListUseCase
+import com.example.binsearch.domain.util.SomethingWentWrong
 import com.example.binsearch.ui.state.RequestHistoryState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -21,7 +22,9 @@ class RequestHistoryViewModel @Inject constructor(
 
     init {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, _ ->
-            _requestHistoryState.value = _requestHistoryState.value.copy(isErrorMessage = true)
+            _requestHistoryState.value = _requestHistoryState.value.copy(
+                errorMessage = SomethingWentWrong
+            )
         }
         viewModelScope.launch(coroutineExceptionHandler) {
             val binRequestList = getBINRequestListUseCase()
@@ -32,6 +35,6 @@ class RequestHistoryViewModel @Inject constructor(
     }
 
     fun hideErrorMessage() {
-        _requestHistoryState.value = _requestHistoryState.value.copy(isErrorMessage = false)
+        _requestHistoryState.value = _requestHistoryState.value.copy(errorMessage = null)
     }
 }

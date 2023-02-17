@@ -7,9 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.binsearch.domain.model.CardInfo
 import com.example.binsearch.domain.usecase.GetCardInfoUseCase
-import com.example.binsearch.domain.util.LoadingError
-import com.example.binsearch.domain.util.LoadingState
-import com.example.binsearch.domain.util.OperationFailed
+import com.example.binsearch.domain.util.*
 import com.example.binsearch.ui.event.BankPhoneClicked
 import com.example.binsearch.ui.event.BankUrlClicked
 import com.example.binsearch.ui.event.CardInfoClickedEvent
@@ -37,7 +35,7 @@ class SearchCardInfoViewModel @Inject constructor(
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, _ ->
             _searchCardInfoState.value = _searchCardInfoState.value.copy(
                 isLoadingProgressBar = false,
-                errorMessage = LoadingError.SomethingWentWrong
+                errorMessage = SomethingWentWrong
             )
         }
         viewModelScope.launch(coroutineExceptionHandler) {
@@ -90,22 +88,22 @@ class SearchCardInfoViewModel @Inject constructor(
 
     private fun reduce(loadingState: LoadingState.Error) {
         when (loadingState.message) {
-            LoadingError.BINNotFound -> {
+            BINNotFound -> {
                 _searchCardInfoState.value = _searchCardInfoState.value.copy(
                     isLoadingProgressBar = false,
-                    errorMessage = LoadingError.BINNotFound
+                    errorMessage = BINNotFound
                 )
             }
-            LoadingError.NetworkProblem -> {
+            NetworkProblem -> {
                 _searchCardInfoState.value = _searchCardInfoState.value.copy(
                     isLoadingProgressBar = false,
-                    errorMessage = LoadingError.NetworkProblem
+                    errorMessage = NetworkProblem
                 )
             }
-            LoadingError.SomethingWentWrong -> {
+            SomethingWentWrong -> {
                 _searchCardInfoState.value = _searchCardInfoState.value.copy(
                     isLoadingProgressBar = false,
-                    errorMessage = LoadingError.SomethingWentWrong
+                    errorMessage = SomethingWentWrong
                 )
             }
         }

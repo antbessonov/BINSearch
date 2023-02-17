@@ -31,9 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.binsearch.R
-import com.example.binsearch.domain.util.ErrorMessage
-import com.example.binsearch.domain.util.LoadingError
-import com.example.binsearch.domain.util.OperationFailed
+import com.example.binsearch.domain.util.*
 import com.example.binsearch.ui.component.DialogError
 import com.example.binsearch.ui.component.ProgressBarLoading
 import com.example.binsearch.ui.theme.replyTypography
@@ -173,21 +171,21 @@ private fun ErrorMessageContent(
     errorMessage: ErrorMessage,
 ) {
     when (errorMessage) {
-        LoadingError.BINNotFound -> DialogError(
+        BINNotFound -> DialogError(
             modifier = modifier,
             onDialogDismiss = onDialogDismiss,
             onButtonClick = onButtonClick,
             errorTitle = stringResource(R.string.BIN_not_found),
             errorDescription = stringResource(R.string.error_BIN_not_found_description),
         )
-        LoadingError.NetworkProblem -> DialogError(
+        NetworkProblem -> DialogError(
             modifier = modifier,
             onDialogDismiss = onDialogDismiss,
             onButtonClick = onButtonClick,
             errorTitle = stringResource(R.string.network_problem),
             errorDescription = stringResource(R.string.error_network_problem_description),
         )
-        LoadingError.SomethingWentWrong -> DialogError(
+        SomethingWentWrong -> DialogError(
             modifier = modifier,
             onDialogDismiss = onDialogDismiss,
             onButtonClick = onButtonClick,

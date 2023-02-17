@@ -8,8 +8,9 @@ import com.example.binsearch.domain.model.Bank
 import com.example.binsearch.domain.model.CardInfo
 import com.example.binsearch.domain.model.Country
 import com.example.binsearch.domain.model.NumberCard
-import com.example.binsearch.domain.util.LoadingError
+import com.example.binsearch.domain.util.BINNotFound
 import com.example.binsearch.domain.util.LoadingState
+import com.example.binsearch.domain.util.SomethingWentWrong
 import retrofit2.Response
 
 class CardInfoMapper {
@@ -21,8 +22,8 @@ class CardInfoMapper {
                 val cardInfo = mapDtoToEntity(responseBody)
                 LoadingState.Success(cardInfo)
             }
-            404 -> LoadingState.Error(message = LoadingError.BINNotFound)
-            else -> LoadingState.Error(message = LoadingError.SomethingWentWrong)
+            404 -> LoadingState.Error(message = BINNotFound)
+            else -> LoadingState.Error(message = SomethingWentWrong)
         }
     }
 

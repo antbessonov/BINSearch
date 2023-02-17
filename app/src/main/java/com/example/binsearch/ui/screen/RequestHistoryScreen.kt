@@ -16,6 +16,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.binsearch.R
 import com.example.binsearch.domain.model.BINRequest
+import com.example.binsearch.domain.util.SomethingWentWrong
 import com.example.binsearch.ui.component.DialogError
 import com.example.binsearch.ui.theme.replyTypography
 import com.example.binsearch.viewmodel.RequestHistoryViewModel
@@ -32,7 +33,7 @@ fun RequestHistoryScreen(
     } else {
         BinRequestList(modifier = modifier, binRequestList = requestHistoryState.binRequestList)
     }
-    if (requestHistoryState.isErrorMessage) {
+    if (requestHistoryState.errorMessage is SomethingWentWrong) {
         DialogError(
             modifier = modifier,
             onDialogDismiss = requestHistoryViewModel::hideErrorMessage,
