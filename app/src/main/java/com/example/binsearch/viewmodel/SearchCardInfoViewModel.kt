@@ -1,8 +1,6 @@
 package com.example.binsearch.viewmodel
 
 import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.binsearch.domain.model.CardInfo
@@ -13,10 +11,10 @@ import com.example.binsearch.ui.event.BankUrlClicked
 import com.example.binsearch.ui.event.CardInfoClickedEvent
 import com.example.binsearch.ui.event.CountryCoordinatesClicked
 import com.example.binsearch.ui.model.converter.CardInfoUiConverter
+import com.example.binsearch.ui.navigation.SystemNavigator
 import com.example.binsearch.ui.state.SearchCardInfoState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -25,7 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchCardInfoViewModel @Inject constructor(
     private val getCardInfoUseCase: GetCardInfoUseCase,
-    private val cardInfoUiConverter: CardInfoUiConverter
+    private val cardInfoUiConverter: CardInfoUiConverter,
+    private val systemNavigator: SystemNavigator
 ) : ViewModel() {
 
     private val _searchCardInfoState = MutableStateFlow(SearchCardInfoState())
@@ -41,7 +40,6 @@ class SearchCardInfoViewModel @Inject constructor(
         viewModelScope.launch(coroutineExceptionHandler) {
             _searchCardInfoState.value =
                 _searchCardInfoState.value.copy(isLoadingProgressBar = true)
-            delay(1500L)
             val response = getCardInfoUseCase(binCard = binCard)
             handleResponse(response = response)
         }
@@ -79,15 +77,15 @@ class SearchCardInfoViewModel @Inject constructor(
         }
     }
 
-    private fun handleResponse(response: LoadingState<CardInfo>) {
+    private fun handleResponse(response: LoadingResult<CardInfo>) {
         when (response) {
-            is LoadingState.Error -> reduce(response)
-            is LoadingState.Success -> reduce(response)
+            is LoadingResult.Error -> reduce(response)
+            is LoadingResult.Success -> reduce(response)
         }
     }
 
-    private fun reduce(loadingState: LoadingState.Error) {
-        when (loadingState.message) {
+    private fun reduce(loadingResult: LoadingResult.Error) {
+        when (loadingResult.message) {
             BINNotFound -> {
                 _searchCardInfoState.value = _searchCardInfoState.value.copy(
                     isLoadingProgressBar = false,
@@ -109,10 +107,10 @@ class SearchCardInfoViewModel @Inject constructor(
         }
     }
 
-    private fun reduce(loadingState: LoadingState.Success<CardInfo>) {
+    private fun reduce(loadingResult: LoadingResult.Success<CardInfo>) {
         _searchCardInfoState.value = _searchCardInfoState.value.copy(
             isLoadingProgressBar = false,
-            cardInfo = cardInfoUiConverter.convertEntityToUiModel(cardInfo = loadingState.value)
+            cardInfo = cardInfoUiConverter.convertEntityToUiModel(cardInfo = loadingResult.value)
         )
     }
 
@@ -124,18 +122,15 @@ class SearchCardInfoViewModel @Inject constructor(
     }
 
     private fun reduceEvent(event: BankPhoneClicked) {
-        val callIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:${event.bankPhone}"))
-        event.context.startActivity(callIntent)
+        systemNavigator.goToPhoneApp(phone = event.bankPhone)
     }
 
     private fun reduceEvent(event: BankUrlClicked) {
-        val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://${event.bankUrl}"))
-        event.context.startActivity(webIntent)
+        systemNavigator.goToBrowser(url = event.bankUrl)
     }
 
     private fun reduceEvent(event: CountryCoordinatesClicked) {
-        val mapIntent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:${event.countryCoordinates}"))
-        event.context.startActivity(mapIntent)
+        systemNavigator.goToMapApp(coordinates = event.countryCoordinates)
     }
 
     companion object {
