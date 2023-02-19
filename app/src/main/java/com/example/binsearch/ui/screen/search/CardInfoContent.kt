@@ -1,6 +1,5 @@
 package com.example.binsearch.ui.screen.search
 
-import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,8 +32,6 @@ fun CardInfoContent(
 ) {
     val weightFirst = 0.55f
     val weightSecond = 0.45f
-
-    val context = LocalContext.current
 
     Card(modifier = modifier.padding(start = 16.dp, end = 16.dp)) {
         Column(modifier = modifier.padding(16.dp)) {
@@ -84,13 +80,11 @@ fun CardInfoContent(
                 modifier = modifier.align(alignment = Alignment.CenterHorizontally),
                 bank = cardInfo.bank,
                 onClick = onClick,
-                context = context
             )
             CountryInfo(
                 modifier = modifier.align(alignment = Alignment.CenterHorizontally),
                 country = cardInfo.country,
                 onClick = onClick,
-                context = context
             )
         }
     }
@@ -101,7 +95,6 @@ private fun CountryInfo(
     modifier: Modifier,
     country: CountryUi,
     onClick: (CardInfoClickedEvent) -> Unit,
-    context: Context
 ) {
     Column(modifier = modifier.padding(top = 8.dp)) {
         Text(
@@ -118,7 +111,6 @@ private fun CountryInfo(
             modifier = modifier.clickable {
                 onClick(
                     CountryCoordinatesClicked(
-                        context = context,
                         countryCoordinates = "${country.latitude}, ${country.longitude}"
                     )
                 )
@@ -138,8 +130,7 @@ private fun CountryInfo(
 private fun BankInfo(
     modifier: Modifier,
     bank: BankUi,
-    onClick: (CardInfoClickedEvent) -> Unit,
-    context: Context
+    onClick: (CardInfoClickedEvent) -> Unit
 ) {
     Column(modifier = modifier.padding(top = 8.dp)) {
         Text(
@@ -155,10 +146,7 @@ private fun BankInfo(
         Text(
             modifier = modifier.clickable(enabled = bank.url != CardInfoUiConverter.EMPTY_VALUE) {
                 onClick(
-                    BankUrlClicked(
-                        context = context,
-                        bankUrl = bank.url
-                    )
+                    BankUrlClicked(bankUrl = bank.url)
                 )
             },
             text = bank.url,
@@ -168,10 +156,7 @@ private fun BankInfo(
         Text(
             modifier = modifier.clickable(enabled = bank.phone != CardInfoUiConverter.EMPTY_VALUE) {
                 onClick(
-                    BankPhoneClicked(
-                        context = context,
-                        bankPhone = bank.phone
-                    )
+                    BankPhoneClicked(bankPhone = bank.phone)
                 )
             },
             text = bank.phone,
