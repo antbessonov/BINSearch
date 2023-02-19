@@ -9,7 +9,7 @@ import com.example.binsearch.domain.model.CardInfo
 import com.example.binsearch.domain.model.Country
 import com.example.binsearch.domain.model.NumberCard
 import com.example.binsearch.domain.util.BINNotFound
-import com.example.binsearch.domain.util.LoadingState
+import com.example.binsearch.domain.util.LoadingResult
 import com.example.binsearch.domain.util.SomethingWentWrong
 import okhttp3.ResponseBody
 import org.junit.Assert
@@ -71,7 +71,7 @@ class CardInfoMapperTest {
                 city = null
             )
         )
-        val expected: LoadingState<CardInfo> = LoadingState.Success(cardInfo)
+        val expected: LoadingResult<CardInfo> = LoadingResult.Success(cardInfo)
 
         Assert.assertEquals(expected, actual)
     }
@@ -86,7 +86,7 @@ class CardInfoMapperTest {
         val response: Response<CardInfoDto> = Response.error(code, responseBody)
         val actual = mapper.mapResponseToState(response = response)
 
-        val expected: LoadingState<CardInfo> = LoadingState.Error(message = BINNotFound)
+        val expected: LoadingResult<CardInfo> = LoadingResult.Error(message = BINNotFound)
 
         Assert.assertEquals(expected, actual)
     }
@@ -101,7 +101,7 @@ class CardInfoMapperTest {
         val response: Response<CardInfoDto> = Response.error(code, responseBody)
         val actual = mapper.mapResponseToState(response = response)
 
-        val expected: LoadingState<CardInfo> = LoadingState.Error(message = SomethingWentWrong)
+        val expected: LoadingResult<CardInfo> = LoadingResult.Error(message = SomethingWentWrong)
 
         Assert.assertEquals(expected, actual)
     }

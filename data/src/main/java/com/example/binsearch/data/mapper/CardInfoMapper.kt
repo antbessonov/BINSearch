@@ -9,21 +9,21 @@ import com.example.binsearch.domain.model.CardInfo
 import com.example.binsearch.domain.model.Country
 import com.example.binsearch.domain.model.NumberCard
 import com.example.binsearch.domain.util.BINNotFound
-import com.example.binsearch.domain.util.LoadingState
+import com.example.binsearch.domain.util.LoadingResult
 import com.example.binsearch.domain.util.SomethingWentWrong
 import retrofit2.Response
 
 class CardInfoMapper {
 
-    fun mapResponseToState(response: Response<CardInfoDto>): LoadingState<CardInfo> {
+    fun mapResponseToState(response: Response<CardInfoDto>): LoadingResult<CardInfo> {
         return when (response.code()) {
             in 200..299 -> {
                 val responseBody = response.body() ?: throw Exception("Response body is null.")
                 val cardInfo = mapDtoToEntity(responseBody)
-                LoadingState.Success(cardInfo)
+                LoadingResult.Success(cardInfo)
             }
-            404 -> LoadingState.Error(message = BINNotFound)
-            else -> LoadingState.Error(message = SomethingWentWrong)
+            404 -> LoadingResult.Error(message = BINNotFound)
+            else -> LoadingResult.Error(message = SomethingWentWrong)
         }
     }
 

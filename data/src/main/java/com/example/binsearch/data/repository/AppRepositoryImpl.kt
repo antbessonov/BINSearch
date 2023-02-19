@@ -8,7 +8,7 @@ import com.example.binsearch.data.network.APIService
 import com.example.binsearch.domain.model.BINRequest
 import com.example.binsearch.domain.model.CardInfo
 import com.example.binsearch.domain.repository.AppRepository
-import com.example.binsearch.domain.util.LoadingState
+import com.example.binsearch.domain.util.LoadingResult
 import com.example.binsearch.domain.util.NetworkProblem
 import com.example.binsearch.domain.util.SomethingWentWrong
 import java.io.IOException
@@ -20,15 +20,15 @@ class AppRepositoryImpl(
     private val binRequestMapper: BINRequestMapper
 ) : AppRepository {
 
-    override suspend fun getCardInfo(binCard: String): LoadingState<CardInfo> {
+    override suspend fun getCardInfo(binCard: String): LoadingResult<CardInfo> {
         return try {
             saveBINRequestToDatabase(binCard = binCard)
             val response = apiService.getGardInfo(binCard = binCard)
             cardInfoMapper.mapResponseToState(response)
         } catch (e: IOException) {
-            LoadingState.Error(message = NetworkProblem)
+            LoadingResult.Error(message = NetworkProblem)
         } catch (e: Exception) {
-            LoadingState.Error(message = SomethingWentWrong)
+            LoadingResult.Error(message = SomethingWentWrong)
         }
     }
 
