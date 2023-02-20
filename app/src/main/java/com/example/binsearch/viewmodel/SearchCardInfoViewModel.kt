@@ -1,17 +1,11 @@
 package com.example.binsearch.viewmodel
 
-import android.content.ActivityNotFoundException
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.binsearch.domain.model.CardInfo
 import com.example.binsearch.domain.usecase.GetCardInfoUseCase
 import com.example.binsearch.domain.util.*
-import com.example.binsearch.ui.event.BankPhoneClicked
-import com.example.binsearch.ui.event.BankUrlClicked
-import com.example.binsearch.ui.event.CardInfoClickedEvent
-import com.example.binsearch.ui.event.CountryCoordinatesClicked
 import com.example.binsearch.ui.model.converter.CardInfoUiConverter
-import com.example.binsearch.ui.navigation.SystemNavigator
 import com.example.binsearch.ui.state.SearchCardInfoState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -23,8 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchCardInfoViewModel @Inject constructor(
     private val getCardInfoUseCase: GetCardInfoUseCase,
-    private val cardInfoUiConverter: CardInfoUiConverter,
-    private val systemNavigator: SystemNavigator
+    private val cardInfoUiConverter: CardInfoUiConverter
 ) : ViewModel() {
 
     private val _searchCardInfoState = MutableStateFlow(SearchCardInfoState())
@@ -38,8 +31,9 @@ class SearchCardInfoViewModel @Inject constructor(
             )
         }
         viewModelScope.launch(coroutineExceptionHandler) {
-            _searchCardInfoState.value =
-                _searchCardInfoState.value.copy(isLoadingProgressBar = true)
+            _searchCardInfoState.value = _searchCardInfoState.value.copy(
+                isLoadingProgressBar = true
+            )
             val response = getCardInfoUseCase(binCard = binCard)
             handleResponse(response = response)
         }
@@ -63,18 +57,10 @@ class SearchCardInfoViewModel @Inject constructor(
         _searchCardInfoState.value = _searchCardInfoState.value.copy(errorMessage = null)
     }
 
-    fun obtainCardInfoEvent(event: CardInfoClickedEvent) {
-        try {
-            when (event) {
-                is BankPhoneClicked -> reduceEvent(event = event)
-                is BankUrlClicked -> reduceEvent(event = event)
-                is CountryCoordinatesClicked -> reduceEvent(event = event)
-            }
-        } catch (e: ActivityNotFoundException) {
-            _searchCardInfoState.value = _searchCardInfoState.value.copy(
-                errorMessage = OperationFailed
-            )
-        }
+    fun handleNavigationError() {
+        _searchCardInfoState.value = _searchCardInfoState.value.copy(
+            errorMessage = OperationFailed
+        )
     }
 
     private fun handleResponse(response: LoadingResult<CardInfo>) {
@@ -119,18 +105,6 @@ class SearchCardInfoViewModel @Inject constructor(
     private fun checkBINValid(filteredValue: String) {
         val isValid = filteredValue.length in MIN_LENGTH_BIN..MAX_LENGTH_BIN
         _searchCardInfoState.value = _searchCardInfoState.value.copy(isBINValid = isValid)
-    }
-
-    private fun reduceEvent(event: BankPhoneClicked) {
-        systemNavigator.goToPhoneApp(phone = event.bankPhone)
-    }
-
-    private fun reduceEvent(event: BankUrlClicked) {
-        systemNavigator.goToBrowser(url = event.bankUrl)
-    }
-
-    private fun reduceEvent(event: CountryCoordinatesClicked) {
-        systemNavigator.goToMapApp(coordinates = event.countryCoordinates)
     }
 
     companion object {
