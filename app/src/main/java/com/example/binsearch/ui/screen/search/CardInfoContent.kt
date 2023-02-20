@@ -10,25 +10,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.binsearch.R
-import com.example.binsearch.ui.event.BankPhoneClicked
-import com.example.binsearch.ui.event.BankUrlClicked
-import com.example.binsearch.ui.event.CardInfoClickedEvent
-import com.example.binsearch.ui.event.CountryCoordinatesClicked
 import com.example.binsearch.ui.model.BankUi
 import com.example.binsearch.ui.model.CardInfoUI
 import com.example.binsearch.ui.model.CountryUi
 import com.example.binsearch.ui.model.converter.CardInfoUiConverter
 import com.example.binsearch.ui.theme.replyTypography
+import com.example.binsearch.ui.navigation.goToBrowser
+import com.example.binsearch.ui.navigation.goToMapApp
+import com.example.binsearch.ui.navigation.goToPhoneApp
 
 @Composable
 fun CardInfoContent(
     modifier: Modifier,
     cardInfo: CardInfoUI,
-    onClick: (CardInfoClickedEvent) -> Unit
+    handleNavigationError: () -> Unit
 ) {
     val weightFirst = 0.55f
     val weightSecond = 0.45f
@@ -79,12 +79,12 @@ fun CardInfoContent(
             BankInfo(
                 modifier = modifier.align(alignment = Alignment.CenterHorizontally),
                 bank = cardInfo.bank,
-                onClick = onClick,
+                handleNavigationError = handleNavigationError
             )
             CountryInfo(
                 modifier = modifier.align(alignment = Alignment.CenterHorizontally),
                 country = cardInfo.country,
-                onClick = onClick,
+                handleNavigationError = handleNavigationError
             )
         }
     }
@@ -94,8 +94,10 @@ fun CardInfoContent(
 private fun CountryInfo(
     modifier: Modifier,
     country: CountryUi,
-    onClick: (CardInfoClickedEvent) -> Unit,
+    handleNavigationError: () -> Unit
 ) {
+    val context = LocalContext.current
+
     Column(modifier = modifier.padding(top = 8.dp)) {
         Text(
             modifier = modifier,
@@ -109,10 +111,10 @@ private fun CountryInfo(
         )
         Text(
             modifier = modifier.clickable {
-                onClick(
-                    CountryCoordinatesClicked(
-                        countryCoordinates = "${country.latitude}, ${country.longitude}"
-                    )
+                goToMapApp(
+                    context = context,
+                    coordinates = "${country.latitude}, ${country.longitude}",
+                    handleNavigationError = handleNavigationError
                 )
             },
             text = String.format(
@@ -130,8 +132,10 @@ private fun CountryInfo(
 private fun BankInfo(
     modifier: Modifier,
     bank: BankUi,
-    onClick: (CardInfoClickedEvent) -> Unit
+    handleNavigationError: () -> Unit
 ) {
+    val context = LocalContext.current
+
     Column(modifier = modifier.padding(top = 8.dp)) {
         Text(
             modifier = modifier,
@@ -145,8 +149,10 @@ private fun BankInfo(
         )
         Text(
             modifier = modifier.clickable(enabled = bank.url != CardInfoUiConverter.EMPTY_VALUE) {
-                onClick(
-                    BankUrlClicked(bankUrl = bank.url)
+                goToBrowser(
+                    context = context,
+                    url = bank.url,
+                    handleNavigationError = handleNavigationError
                 )
             },
             text = bank.url,
@@ -155,8 +161,10 @@ private fun BankInfo(
         )
         Text(
             modifier = modifier.clickable(enabled = bank.phone != CardInfoUiConverter.EMPTY_VALUE) {
-                onClick(
-                    BankPhoneClicked(bankPhone = bank.phone)
+                goToPhoneApp(
+                    context = context,
+                    phone = bank.phone,
+                    handleNavigationError = handleNavigationError
                 )
             },
             text = bank.phone,
@@ -200,5 +208,5 @@ private fun CardInfoContentPreview() {
             phone = "+4589893300"
         )
     )
-    CardInfoContent(modifier = Modifier, cardInfo = cardInfo, onClick = {})
+    CardInfoContent(modifier = Modifier, cardInfo = cardInfo, handleNavigationError = {})
 }
