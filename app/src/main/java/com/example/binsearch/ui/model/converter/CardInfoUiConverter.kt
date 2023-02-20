@@ -36,16 +36,20 @@ class CardInfoUiConverter @Inject constructor() {
         }
     }
 
-    private fun convertCountryEntityToCountryUiModel(country: Country): CountryUi {
-        return CountryUi(
-            nameWithEmoji = "${country.emoji} ${country.name}",
-            latitude = country.latitude.toString(),
-            longitude = country.longitude.toString()
-        )
+    private fun convertCountryEntityToCountryUiModel(country: Country?): CountryUi {
+        return if (country == null) {
+            CountryUi(nameWithEmoji = EMPTY_VALUE, latitude = EMPTY_VALUE, longitude = EMPTY_VALUE)
+        } else {
+            CountryUi(
+                nameWithEmoji = "${country.emoji} ${country.name}",
+                latitude = country.latitude.toString(),
+                longitude = country.longitude.toString()
+            )
+        }
     }
 
     private fun convertType(value: String?): String {
-       return when(value) {
+        return when (value) {
             "debit" -> DEBIT
             "credit" -> CREDIT
             else -> EMPTY_VALUE
