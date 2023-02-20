@@ -27,37 +27,39 @@ class CardInfoMapper {
         }
     }
 
-    private fun mapDtoToEntity(dto: CardInfoDto): CardInfo {
-        return CardInfo(
-            numberCard = mapNumberCardDtoToEntity(numberCardDto = dto.numberCard),
-            scheme = dto.scheme,
-            type = dto.type,
-            brand = dto.brand,
-            prepaid = dto.prepaid,
-            country = mapCountryDtoToEntity(countryDto = dto.country),
-            bank = mapBankDtoToEntity(bankDto = dto.bank)
-        )
-    }
+    private fun mapDtoToEntity(dto: CardInfoDto) = CardInfo(
+        numberCard = mapNumberCardDtoToEntity(numberCardDto = dto.numberCard),
+        scheme = dto.scheme,
+        type = dto.type,
+        brand = dto.brand,
+        prepaid = dto.prepaid,
+        country = mapCountryDtoToEntity(countryDto = dto.country),
+        bank = mapBankDtoToEntity(bankDto = dto.bank)
+    )
 
     private fun mapNumberCardDtoToEntity(numberCardDto: NumberCardDto) = NumberCard(
         length = numberCardDto.length,
         luhn = numberCardDto.luhn
     )
 
-    private fun mapCountryDtoToEntity(countryDto: CountryDto) = Country(
-        numeric = countryDto.numeric,
-        alpha2 = countryDto.alpha2,
-        name = countryDto.name,
-        emoji = countryDto.emoji,
-        currency = countryDto.currency,
-        latitude = countryDto.latitude,
-        longitude = countryDto.longitude
-    )
+    private fun mapCountryDtoToEntity(countryDto: CountryDto?) = countryDto?.let {
+        Country(
+            numeric = it.numeric,
+            alpha2 = countryDto.alpha2,
+            name = countryDto.name,
+            emoji = countryDto.emoji,
+            currency = countryDto.currency,
+            latitude = countryDto.latitude,
+            longitude = countryDto.longitude
+        )
+    }
 
-    private fun mapBankDtoToEntity(bankDto: BankDto?) = Bank(
-        name = bankDto?.name,
-        url = bankDto?.url,
-        phone = bankDto?.phone,
-        city = bankDto?.city
-    )
+    private fun mapBankDtoToEntity(bankDto: BankDto?) = bankDto?.let {
+        Bank(
+            name = bankDto.name,
+            url = bankDto.url,
+            phone = bankDto.phone,
+            city = bankDto.city
+        )
+    }
 }
