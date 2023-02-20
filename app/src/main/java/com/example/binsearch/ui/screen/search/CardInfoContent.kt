@@ -18,7 +18,7 @@ import com.example.binsearch.R
 import com.example.binsearch.ui.model.BankUi
 import com.example.binsearch.ui.model.CardInfoUI
 import com.example.binsearch.ui.model.CountryUi
-import com.example.binsearch.ui.model.converter.CardInfoUiConverter
+import com.example.binsearch.ui.model.converter.CardInfoUiConverter.Companion.EMPTY_VALUE
 import com.example.binsearch.ui.theme.replyTypography
 import com.example.binsearch.ui.navigation.goToBrowser
 import com.example.binsearch.ui.navigation.goToMapApp
@@ -98,6 +98,9 @@ private fun CountryInfo(
 ) {
     val context = LocalContext.current
 
+    val isLatitudeEmpty = country.latitude == EMPTY_VALUE
+    val isLongitudeEmpty = country.longitude == EMPTY_VALUE
+
     Column(modifier = modifier.padding(top = 8.dp)) {
         Text(
             modifier = modifier,
@@ -110,7 +113,7 @@ private fun CountryInfo(
             style = replyTypography.bodyMedium
         )
         Text(
-            modifier = modifier.clickable {
+            modifier = modifier.clickable(enabled = (!isLatitudeEmpty).or(!isLongitudeEmpty)) {
                 goToMapApp(
                     context = context,
                     coordinates = "${country.latitude}, ${country.longitude}",
@@ -123,7 +126,11 @@ private fun CountryInfo(
                 country.longitude
             ),
             style = replyTypography.bodyMedium,
-            color = Color.Blue
+            color = if ((!isLatitudeEmpty).or(!isLongitudeEmpty)) {
+                Color.Blue
+            } else {
+                Color.Unspecified
+            }
         )
     }
 }
@@ -135,6 +142,9 @@ private fun BankInfo(
     handleNavigationError: () -> Unit
 ) {
     val context = LocalContext.current
+
+    val isUrlEmpty = bank.url == EMPTY_VALUE
+    val isPhoneEmpty = bank.phone == EMPTY_VALUE
 
     Column(modifier = modifier.padding(top = 8.dp)) {
         Text(
@@ -148,7 +158,7 @@ private fun BankInfo(
             style = replyTypography.bodyMedium
         )
         Text(
-            modifier = modifier.clickable(enabled = bank.url != CardInfoUiConverter.EMPTY_VALUE) {
+            modifier = modifier.clickable(enabled = !isUrlEmpty) {
                 goToBrowser(
                     context = context,
                     url = bank.url,
@@ -157,10 +167,14 @@ private fun BankInfo(
             },
             text = bank.url,
             style = replyTypography.bodyMedium,
-            color = Color.Blue
+            color = if (!isUrlEmpty) {
+                Color.Blue
+            } else {
+                Color.Unspecified
+            }
         )
         Text(
-            modifier = modifier.clickable(enabled = bank.phone != CardInfoUiConverter.EMPTY_VALUE) {
+            modifier = modifier.clickable(enabled = !isPhoneEmpty) {
                 goToPhoneApp(
                     context = context,
                     phone = bank.phone,
@@ -169,7 +183,11 @@ private fun BankInfo(
             },
             text = bank.phone,
             style = replyTypography.bodyMedium,
-            color = Color.Blue
+            color = if (!isPhoneEmpty) {
+                Color.Blue
+            } else {
+                Color.Unspecified
+            }
         )
     }
 }
