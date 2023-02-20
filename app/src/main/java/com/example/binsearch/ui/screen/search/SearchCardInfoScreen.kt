@@ -72,7 +72,7 @@ fun SearchCardInfoScreen(
                 CardInfoContent(
                     modifier = modifier,
                     cardInfo = it,
-                    onClick = searchCardInfoViewModel::obtainCardInfoEvent
+                    handleNavigationError = searchCardInfoViewModel::handleNavigationError
                 )
             }
         }
